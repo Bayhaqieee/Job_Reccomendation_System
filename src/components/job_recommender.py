@@ -11,7 +11,7 @@ stopw  = set(stopwords.words('english'))
 from pyresparser import ResumeParser
 import os
 from docx import Document
-import src.notebook.skills_extraction as skills_extraction
+import components.skills_extraction as skills_extraction
 
 # Load dataset:
 jd_df=pd.read_csv(r'D:/ML_Projects/Job_Reccomendation_System/src/data/jd_structured_data.csv')
