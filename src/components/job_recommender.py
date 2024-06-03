@@ -14,10 +14,10 @@ from docx import Document
 import src.notebook.skills_extraction as skills_extraction
 
 # Load dataset:
-jd_df=pd.read_csv(r'C:\Users\Admin\ML_Projects\Job_Recommendation_System\Job-Recommendation-System\src\data\jd_structured_data.csv')
+jd_df=pd.read_csv(r'D:/ML_Projects/Job_Reccomendation_System/src/data/jd_structured_data.csv')
 
 # Load the extracted resume skills:
-file_path=r'C:\Users\Admin\ML_Projects\Job_Recommendation_System\Job-Recommendation-System\utilities\resumes\CV.pdf'
+file_path=r'D:/ML_Projects/Job_Reccomendation_System/utilities/resumes/CV.pdf'
 skills=[]
 skills.append(' '.join(word for word in skills_extraction.skills_extractor(file_path)))
 

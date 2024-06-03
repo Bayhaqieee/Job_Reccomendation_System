@@ -7,7 +7,6 @@ from src.components.job_recommender import ngrams,getNearestN,jd_df
 import src.notebook.skills_extraction as skills_extraction
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-
 # Function to process the resume and recommend jobs
 def process_resume(file_path):
     # Extract text from PDF resume
@@ -49,6 +48,7 @@ def main():
 
     # File uploader
     uploaded_file = st.file_uploader("Choose a file", type=['pdf'])
+    st.write("Ensure your CV is ATS Friendly and Word Based")
 
     if uploaded_file is not None:
         # Process resume and recommend jobs

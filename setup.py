@@ -15,8 +15,8 @@ def get_requirements(file_path:str)->list[str]:
 setup(
     name='Job_Recommendation_System',
     version='0.0.1',
-    author='Abbas Behrainwala',
-    author_email='abbasbehrain95@gmail.com',
+    author='Kelompok 4',
+    author_email='aikelompok4@gmail.com',
     packages=find_packages(),
     install_requires=get_requirements('requirements.txt')
 

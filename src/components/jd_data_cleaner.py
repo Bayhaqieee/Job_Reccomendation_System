@@ -93,4 +93,4 @@ unstructured_df['Average Salary'].fillna(salary_average, inplace=True)
 unstructured_df['Average Revenue'].fillna(revenue_average, inplace=True)
 
 # Convert DataFrame to CSV file
-unstructured_df.to_csv(r'C:\Users\Admin\ML_Projects\Job_Recommendation_System\Job-Recommendation-System\src\data\jd_structured_data.csv', index=False)
+unstructured_df.to_csv(r'D:/ML_Projects/Job_Reccomendation_System/src/data/jd_structured_data.csv', index=False)

@@ -13,7 +13,7 @@ import json
 import urllib
 import time
 
-driver = webdriver.Chrome(executable_path=r'C:\Users\Admin\ML_Projects\Job_Recommendation_System\Job-Recommendation-System\chromedriver_win32\chromedriver.exe')
+driver = webdriver.Chrome(executable_path=r'D:/ML_Projects/Job_Reccomendation_System/chromedriver_win32/chromedriver.exe')
 
 def openbrowser(locid, key):
     driver.wait = WebDriverWait(driver, 5)
@@ -73,7 +73,7 @@ with open('url_data_scientist_loc_bangalore.json','r') as f:
 data ={}    
 i = 1
 jd_df = pd.DataFrame()
-driver = webdriver.Chrome(executable_path=r'C:\Users\Admin\ML_Projects\Job_Recommendation_System\Job-Recommendation-System\chromedriver_win32\chromedriver.exe')
+driver = webdriver.Chrome(executable_path=r'D:/ML_Projects/Job_Reccomendation_System/chromedriver_win32/chromedriver.exe')
 
 for u in tqdm(url):
     driver.wait = WebDriverWait(driver, 2)
@@ -106,7 +106,7 @@ jd_df = pd.DataFrame(data)
 jd = jd_df.transpose()
 
 jd = jd[['url','Position','Company','Location','Job_Description']]
-jd.to_csv(r'C:\Users\Admin\ML_Projects\Job_Recommendation_System\Job-Recommendation-System\src\data\jd_unstructured_data.csv')
+jd.to_csv(r'D:/ML_Projects/Job_Reccomendation_System/src/data/jd_unstructured_data.csv')
 print('file created')
 
 
@@ -289,8 +289,8 @@ def get_jobs(keyword, num_jobs, verbose, path, slp_time):
 
     return pd.DataFrame(jobs)  #This line converts the dictionary object into a pandas DataFrame.
 
-    path = r"C:\Users\Admin\ML_Projects\Job_Recommendation_System\Job-Recommendation-System\chromedriver_win32\chromedriver.exe"
+    path = r"D:/ML_Projects/Job_Recommendation_System/Job-Recommendation-System/chromedriver_win32/chromedriver.exe"
 
 unstructured_data_df = get_jobs('data scientist',1000, False, driver, 15)
 
-unstructured_data_df.to_csv(r'C:\Users\Admin\ML_Projects\Job_Recommendation_System\Job-Recommendation-System\src\data\jd_unstructured_data.csv', index = False)
+unstructured_data_df.to_csv(r'D:/ML_Projects/Job_Reccomendation_System/src/data/jd_unstructured_data.csv', index = False)
