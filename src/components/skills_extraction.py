@@ -46,12 +46,11 @@ def extract_text_from_pdf(file_path:str):
 
 def skills_extractor(file_path):
         # Extract text from PDF
-        path=r'D:/ML_Projects/Job_Reccomendation_System/src/data'
-        full_file_path = os.path.join(path, file_path)
-        resume_text = extract_text_from_pdf(full_file_path)
+        resume_text = extract_text_from_pdf(file_path)
 
         # Extract skills from resume text
         skills = list(extract_skills(resume_text))
         return skills
+
 
 
