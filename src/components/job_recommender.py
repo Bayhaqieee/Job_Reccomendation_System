@@ -17,7 +17,10 @@ skills = []
 
 def set_skills(resume_skills):
     global skills
-    skills = [' '.join(word for word in resume_skills)]
+    if resume_skills:
+        skills = [' '.join(word for word in resume_skills if word.lower() not in stopw)]
+    else:
+        skills = []
 
 def ngrams(string, n=3):
     string = fix_text(string)  # fix text
@@ -38,24 +41,48 @@ def ngrams(string, n=3):
 
 vectorizer = TfidfVectorizer(min_df=1, analyzer=ngrams, lowercase=False)
 
-nbrs = NearestNeighbors(n_neighbors=1, n_jobs=-1)
-
-def getNearestN(query):
-    queryTFIDF_ = vectorizer.transform(query)
+def getNearestN(queryTFIDF_, nbrs):
     distances, indices = nbrs.kneighbors(queryTFIDF_)
     return distances, indices
 
-def recommend_jobs():
+def recommend_jobs(user_location):
     global skills
-    tfidf = vectorizer.fit_transform(skills)
-    nbrs.fit(tfidf)
-    jd_test = jd_df['Processed_JD'].values.astype('U')
     
-    distances, indices = getNearestN(jd_test)
-    matches = [{'Match confidence': round(distances[i][0], 2)} for i in range(len(indices))]
-    matches = pd.DataFrame(matches)
+    if not skills or all(word in stopw for word in skills):
+        raise ValueError("No valid skills extracted. Please check the resume content.")
     
-    # Following recommends Top 5 Jobs based on candidate resume:
-    jd_df['match'] = matches['Match confidence']
+    # Create a single document with skills for TF-IDF vectorization
+    skills_doc = [' '.join(skills)]
+    tfidf = vectorizer.fit_transform(skills_doc)
     
-    return jd_df.head(10).sort_values('match')
+    # Filter jobs by location
+    filtered_jobs = jd_df[jd_df['Location'].str.contains(user_location, case=False, na=False)]
+    if filtered_jobs.empty:
+        return pd.DataFrame()
+    
+    # Transform job descriptions
+    jd_test = filtered_jobs['Processed_JD'].values.astype('U')
+    jd_tfidf = vectorizer.transform(jd_test)
+    
+    # Fit NearestNeighbors on job descriptions
+    nbrs = NearestNeighbors(n_neighbors=min(len(filtered_jobs), 5), n_jobs=-1).fit(jd_tfidf)
+    
+    # Find nearest neighbors to the skills vector
+    distances, indices = getNearestN(tfidf, nbrs)
+    
+    matches = []
+    for i in range(len(indices[0])):
+        match_info = {
+            'Match confidence': round(distances[0][i], 2),
+            'Job Title': filtered_jobs.iloc[indices[0][i]]['Job Title'],
+            'Company Name': filtered_jobs.iloc[indices[0][i]]['Company Name'],
+            'Location': filtered_jobs.iloc[indices[0][i]]['Location'],
+            'Industry': filtered_jobs.iloc[indices[0][i]]['Industry'],
+            'Sector': filtered_jobs.iloc[indices[0][i]]['Sector'],
+            'Average Salary': filtered_jobs.iloc[indices[0][i]]['Average Salary']
+        }
+        matches.append(match_info)
+    
+    matches_df = pd.DataFrame(matches)
+    
+    return matches_df.drop_duplicates().sort_values('Match confidence').head(5)
