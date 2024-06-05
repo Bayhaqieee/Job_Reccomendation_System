@@ -19,7 +19,7 @@ def process_resume(file_path):
 # Streamlit app
 def main():
     st.title("Job Recommendation App")
-    st.write("Selamat datang di Aplikasi Rekomendasi Pekerjaan kami. Di sini, Anda dapat mengunggah resume Anda dalam format PDF dan kami akan mencocokkan keterampilan Anda dengan pekerjaan yang paling sesuai.")
+    st.write("Upload Your CV to be analyzed!")
     
     # File uploader
     uploaded_file = st.file_uploader("Pilih file resume Anda (format PDF):", type=['pdf'])
@@ -33,6 +33,8 @@ def main():
         file_path = os.path.join("CVData", uploaded_file.name)
         with open(file_path, "wb") as f:
             f.write(uploaded_file.getbuffer())
+            
+            st.write("Make Sure your document is on PDF type!")
         
         # Process resume and recommend jobs
         df_jobs = process_resume(file_path)
