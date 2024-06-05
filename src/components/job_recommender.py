@@ -58,4 +58,4 @@ def recommend_jobs():
     # Following recommends Top 5 Jobs based on candidate resume:
     jd_df['match'] = matches['Match confidence']
     
-    return jd_df.head(5).sort_values('match')
+    return jd_df.head(10).sort_values('match')
