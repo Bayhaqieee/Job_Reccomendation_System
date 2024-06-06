@@ -23,9 +23,10 @@ def main():
     
     # File uploader
     uploaded_file = st.file_uploader("Pilih file resume Anda (format PDF):", type=['pdf'])
+    st.write("Pastiin formatmu dokumenmu PDF dan Text-Based yaa!")
     
     # Address input
-    user_location = st.text_input("Masukkan alamat atau kota Anda saat ini")
+    user_location = st.text_input("Masukkan kotamu saat ini (atau kota terdekat juga oke!)")
     
     if uploaded_file is not None and user_location:
         # Create uploads directory if it doesn't exist
@@ -36,7 +37,7 @@ def main():
         file_path = os.path.join("Resume", uploaded_file.name)
         with open(file_path, "wb") as f:
             f.write(uploaded_file.getbuffer())
-            st.write("Dokumen berhasil diunggah! Pastikan dokumen Anda dalam format PDF.")
+            st.write("Dokumen berhasil diunggah!")
         
         # Process resume and recommend jobs
         df_jobs = process_resume(file_path, user_location)

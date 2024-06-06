@@ -85,4 +85,4 @@ def recommend_jobs(user_location):
     
     matches_df = pd.DataFrame(matches)
     
-    return matches_df.drop_duplicates().sort_values('Match confidence').head(5)
+    return matches_df.drop_duplicates().sort_values('Match confidence').head(10)
