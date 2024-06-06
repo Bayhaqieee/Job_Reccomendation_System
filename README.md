@@ -1,7 +1,5 @@
 First of all, this System will not be created without the help from Abbas Behrainwala!
-Visit his Original Repo Here!
-
-github.com/abbas99-hub/Job-Recommendation-System/tree/main
+[Original Repo](github.com/abbas99-hub/Job-Recommendation-System/tree/main)
 
 # What is the Difference?
 
@@ -12,6 +10,10 @@ github.com/abbas99-hub/Job-Recommendation-System/tree/main
 - Removing the web scrapping capability, as my current goal is to develop a job recommendation system as efficient and precise as possible.
 - Fixing the Upload system, on Abbas repo, I discovered that the Upload system on the interface is not working and that the system needs to change the CV Path on a regular basis to read my CV, thus by adjusting the CV uploading system, the system can receive and read the cv without changing the system path.
 - Removing some Unnecessary Folder needed for my system
+
+## Additional Notes
+- Please change the File Datapath on the Components or Double check your auto path changer by checking all file path
+- You can change the dataset by utilizing the job dataset generator on components folder
 
 ## Job Recommendation System using Machine Learning
 This repository contains the code and instructions to build a job recommendation system using machine learning. The system is designed to provide personalized job recommendations based on user preferences and historical job data.
@@ -36,3 +38,18 @@ To collect the necessary data for training our recommendation system, we will ge
 - Sector
 - Revenue
 - Competitors
+
+## Machine Learning Techniques:
+For providing personalized job recommendations, we use the TF-IDF (Term Frequency-Inverse Document Frequency) vectorization approach. This method relies heavily on the "job_recommender.py" component. It uses the scikit-learn library's TF-IDF vectorizer to convert job descriptions and user preferences into numerical feature vectors. These vectors capture the significance of each word in the papers, allowing the system to identify similar job prospects depending on user preferences. The Nearest Neighbors algorithm is then used to select the most appropriate job recommendations.
+
+The skill extractor segment includes functions and utilities for extracting skills from PDF files using the Spacy library, as well as text processing and matching activities. These extracted skills can be analyzed and processed in the job suggestion system.
+
+## Streamlit Application
+To make the job recommendation system more accessible and user-friendly, we created the Streamlit application. Streamlit offers a simple web interface for users to upload their resumes. The program accepts user input, uses machine learning models, and provides the top-recommended jobs based on the user's preferences and previous data.
+
+## Usage
+To use the job recommendation system, follow the instructions below:
+
+- Clone this repository: git clone <repository-url>
+- Install the required dependencies: pip install -r requirements.txt
+- Run the command: streamlit run __init__.py ( For Local Server )
