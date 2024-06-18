@@ -10,6 +10,11 @@ jd_df = pd.read_csv('D:/ML_Projects/Job_Reccomendation_System/src/data/jd_struct
 # Function to process the resume and recommend jobs
 def process_resume(file_path, user_locations):
     try:
+        # Validate file_path is not None
+        if file_path is None or not isinstance(file_path, str):
+            st.warning("Please upload a valid PDF file.")
+            return {}
+
         # Extract text from PDF resume
         resume_skills = skills_extraction.skills_extractor(file_path)
         
