@@ -2,6 +2,10 @@ import streamlit as st
 import os
 from src.components.job_recommender import set_skills, recommend_jobs
 import src.components.skills_extraction as skills_extraction
+import pandas as pd
+
+# Load dataset
+jd_df = pd.read_csv('D:/ML_Projects/Job_Reccomendation_System/src/data/jd_structured_data.csv')
 
 # Function to process the resume and recommend jobs
 def process_resume(file_path, user_location):
@@ -25,8 +29,11 @@ def main():
     uploaded_file = st.file_uploader("Pilih file resume Anda (format PDF):", type=['pdf'])
     st.write("Pastiin formatmu dokumenmu PDF dan Text-Based yaa!")
     
-    # Address input
-    user_location = st.text_input("Masukkan kotamu saat ini (atau kota terdekat juga oke!)")
+    # Extract unique locations
+    location = jd_df['Location'].unique().tolist()
+    
+    # Address input using multiselect
+    user_location = st.multiselect("Pilih lokasi pekerjaan (Anda bisa memilih lebih dari satu):", location)
     
     if uploaded_file is not None and user_location:
         # Create uploads directory if it doesn't exist

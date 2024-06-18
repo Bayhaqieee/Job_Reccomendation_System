@@ -55,8 +55,10 @@ def recommend_jobs(user_location):
     skills_doc = [' '.join(skills)]
     tfidf = vectorizer.fit_transform(skills_doc)
     
-    # Filter jobs by location
-    filtered_jobs = jd_df[jd_df['Location'].str.contains(user_location, case=False, na=False)]
+    # Filter jobs by locations
+    location_filter = jd_df['Location'].apply(lambda loc: any(city in loc for city in user_location))
+    filtered_jobs = jd_df[location_filter]
+    
     if filtered_jobs.empty:
         return pd.DataFrame()
     
