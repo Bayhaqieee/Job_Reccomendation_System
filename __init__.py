@@ -9,33 +9,26 @@ jd_df = pd.read_csv('D:/ML_Projects/Job_Reccomendation_System/src/data/jd_struct
 
 # Function to process the resume and recommend jobs
 def process_resume(file_path, user_locations):
-    try:
-        # Validate file_path is not None
-        if file_path is None or not isinstance(file_path, str):
-            st.warning("Please upload a valid PDF file.")
-            return {}
-
-        # Extract text from PDF resume
-        resume_skills = skills_extraction.skills_extractor(file_path)
-        
-        if not resume_skills:
-            st.warning("No skills extracted from the resume. Please check the document.")
-            return {}
-        
-        # Set the skills in job_recommender
-        set_skills(resume_skills)
-        
-        # Recommend jobs based on resume skills and locations
-        location_specific_jobs = {}
-        for location in user_locations:
-            df_jobs = recommend_jobs(location)
-            location_specific_jobs[location] = df_jobs
-        
-        return location_specific_jobs
-    
-    except Exception as e:
-        st.error(f"An error occurred: {str(e)}")
+    if not file_path:
         return {}
+
+    # Extract text from PDF resume
+    resume_skills = skills_extraction.skills_extractor(file_path)
+    
+    if not resume_skills:
+        st.warning("No skills extracted from the resume. Please check the document.")
+        return {}
+    
+    # Set the skills in job_recommender
+    set_skills(resume_skills)
+    
+    # Recommend jobs based on resume skills and locations
+    location_specific_jobs = {}
+    for location in user_locations:
+        df_jobs = recommend_jobs(location)
+        location_specific_jobs[location] = df_jobs
+    
+    return location_specific_jobs
 
 # Streamlit app
 def main():
@@ -52,7 +45,7 @@ def main():
     # Address input using multiselect
     user_location = st.multiselect("Pilih lokasi pekerjaan (Anda bisa memilih lebih dari satu):", location)
     
-    if uploaded_file is not None and user_location:
+    if uploaded_file is not None:
         # Create uploads directory if it doesn't exist
         if not os.path.exists("Resume"):
             os.makedirs("Resume")
@@ -63,19 +56,20 @@ def main():
             f.write(uploaded_file.getbuffer())
             st.write("Dokumen berhasil diunggah!")
         
-    # Process resume and recommend jobs
-    location_specific_jobs = process_resume(file_path, user_location)
-    
-    if not location_specific_jobs:
-        st.warning("Tidak ada pekerjaan yang ditemukan untuk lokasi yang ditentukan.")
-    else:
-        # Display recommended jobs for each location
-        for location, df_jobs in location_specific_jobs.items():
-            st.write(f"### Pekerjaan yang Direkomendasikan di {location}:")
-            if df_jobs.empty:
-                st.write("Tidak ada pekerjaan yang ditemukan untuk lokasi ini.")
-            else:
-                st.dataframe(df_jobs[['Job Title', 'Company Name', 'Location', 'Industry', 'Sector', 'Average Salary']])
+        # Process resume and recommend jobs
+        location_specific_jobs = process_resume(file_path, user_location)
+        
+        if not location_specific_jobs:
+            st.warning("Yuk tambahin lagi kemungkinan lokasi kerjamu! Soalnya ngga ada pekerjaan yang ditemukan untuk lokasi yang ditentukan.")
+        else:
+            # Display recommended jobs for each location
+            for location, df_jobs in location_specific_jobs.items():
+                st.write(f"### Pekerjaan yang Direkomendasikan di {location}:")
+                if df_jobs.empty:
+                    st.write("Tidak ada pekerjaan yang ditemukan untuk lokasi ini.")
+                else:
+                    st.dataframe(df_jobs[['Job Title', 'Company Name', 'Location', 'Industry', 'Sector', 'Average Salary']])
+        
 
 # Run the Streamlit app
 if __name__ == '__main__':
