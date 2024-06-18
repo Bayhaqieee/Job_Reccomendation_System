@@ -8,17 +8,29 @@ import pandas as pd
 jd_df = pd.read_csv('D:/ML_Projects/Job_Reccomendation_System/src/data/jd_structured_data.csv')
 
 # Function to process the resume and recommend jobs
-def process_resume(file_path, user_location):
-    # Extract text from PDF resume
-    resume_skills = skills_extraction.skills_extractor(file_path)
+def process_resume(file_path, user_locations):
+    try:
+        # Extract text from PDF resume
+        resume_skills = skills_extraction.skills_extractor(file_path)
+        
+        if not resume_skills:
+            st.warning("No skills extracted from the resume. Please check the document.")
+            return {}
+        
+        # Set the skills in job_recommender
+        set_skills(resume_skills)
+        
+        # Recommend jobs based on resume skills and locations
+        location_specific_jobs = {}
+        for location in user_locations:
+            df_jobs = recommend_jobs(location)
+            location_specific_jobs[location] = df_jobs
+        
+        return location_specific_jobs
     
-    # Set the skills in job_recommender
-    set_skills(resume_skills)
-    
-    # Recommend jobs based on resume skills and location
-    df_jobs = recommend_jobs(user_location)
-    
-    return df_jobs
+    except Exception as e:
+        st.error(f"An error occurred: {str(e)}")
+        return {}
 
 # Streamlit app
 def main():
@@ -46,15 +58,19 @@ def main():
             f.write(uploaded_file.getbuffer())
             st.write("Dokumen berhasil diunggah!")
         
-        # Process resume and recommend jobs
-        df_jobs = process_resume(file_path, user_location)
-        
-        if df_jobs.empty:
-            st.warning("Tidak ada pekerjaan yang ditemukan untuk lokasi yang ditentukan.")
-        else:
-            # Display recommended jobs as DataFrame
-            st.write("### Pekerjaan yang Direkomendasikan:")
-            st.dataframe(df_jobs[['Job Title', 'Company Name', 'Location', 'Industry', 'Sector', 'Average Salary']])
+    # Process resume and recommend jobs
+    location_specific_jobs = process_resume(file_path, user_location)
+    
+    if not location_specific_jobs:
+        st.warning("Tidak ada pekerjaan yang ditemukan untuk lokasi yang ditentukan.")
+    else:
+        # Display recommended jobs for each location
+        for location, df_jobs in location_specific_jobs.items():
+            st.write(f"### Pekerjaan yang Direkomendasikan di {location}:")
+            if df_jobs.empty:
+                st.write("Tidak ada pekerjaan yang ditemukan untuk lokasi ini.")
+            else:
+                st.dataframe(df_jobs[['Job Title', 'Company Name', 'Location', 'Industry', 'Sector', 'Average Salary']])
 
 # Run the Streamlit app
 if __name__ == '__main__':
