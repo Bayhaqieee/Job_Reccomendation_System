@@ -51,14 +51,15 @@ def recommend_jobs(user_location):
     if not skills or all(word in stopw for word in skills):
         raise ValueError("No valid skills extracted. Please check the resume content.")
     
+    # Normalize the user location input for comparison
+    normalized_user_location = user_location.strip().lower()
+    
     # Create a single document with skills for TF-IDF vectorization
     skills_doc = [' '.join(skills)]
     tfidf = vectorizer.fit_transform(skills_doc)
     
-    # Filter jobs by locations
-    location_filter = jd_df['Location'].apply(lambda loc: any(city in loc for city in user_location))
-    filtered_jobs = jd_df[location_filter]
-    
+    # Filter jobs by location, normalize the location data for comparison
+    filtered_jobs = jd_df[jd_df['Location'].str.strip().str.lower().str.contains(normalized_user_location, case=False, na=False)]
     if filtered_jobs.empty:
         return pd.DataFrame()
     
