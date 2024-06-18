@@ -39,11 +39,16 @@ def main():
     uploaded_file = st.file_uploader("Pilih file resume Anda (format PDF):", type=['pdf'])
     st.write("Pastiin formatmu dokumenmu PDF dan Text-Based yaa!")
     
-    # Extract unique locations
-    location = jd_df['Location'].unique().tolist()
+    # Option to choose work preference
+    work_preference = st.selectbox("Pilih preferensi kerja Anda:", ["Work from Home", "Work from Office"])
     
-    # Address input using multiselect
-    user_location = st.multiselect("Pilih lokasi pekerjaan (Anda bisa memilih lebih dari satu):", location)
+    # Multiselect for office locations if 'Work from Office' is chosen
+    if work_preference == "Work from Office":
+        # Extract unique locations from the dataset
+        location = jd_df['Location'].unique().tolist()
+        user_location = st.multiselect("Pilih lokasi pekerjaan (Anda bisa memilih lebih dari satu):", location)
+    else:
+        user_location = ["Remote"]
     
     if uploaded_file is not None:
         # Create uploads directory if it doesn't exist
