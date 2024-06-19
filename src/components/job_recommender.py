@@ -68,7 +68,7 @@ def recommend_jobs(user_location):
     jd_tfidf = vectorizer.transform(jd_test)
     
     # Fit NearestNeighbors on job descriptions
-    nbrs = NearestNeighbors(n_neighbors=min(len(filtered_jobs), 5), n_jobs=-1).fit(jd_tfidf)
+    nbrs = NearestNeighbors(n_neighbors=min(len(filtered_jobs), 10), n_jobs=-1).fit(jd_tfidf)
     
     # Find nearest neighbors to the skills vector
     distances, indices = getNearestN(tfidf, nbrs)

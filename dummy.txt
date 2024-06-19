@@ -1,0 +1,9 @@
+    "About": "About me",
+    "Education": "Educations",
+    "Professional Experience": "Professional Experience",
+    "Organization Experience": "Organizational Experience",
+    "Committee Experience": "Organizational Experience",
+    "Projects": "Project",
+    "Skill": "Skills",
+    "Key Competencies": "Skills",
+    "Courses": "Course"

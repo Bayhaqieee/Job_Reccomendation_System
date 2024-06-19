@@ -7,6 +7,18 @@ import pandas as pd
 # Load dataset
 jd_df = pd.read_csv('D:/ML_Projects/Job_Reccomendation_System/src/data/jd_structured_data.csv')
 
+section_mapping = {
+    "About": "About me",
+    "Education": "Educations",
+    "Professional Experience": "Professional Experience",
+    "Organization Experience": "Organizational Experience",
+    "Committee Experience": "Organizational Experience",
+    "Projects": "Project",
+    "Skill": "Skills",
+    "Key Competencies": "Skills",
+    "Courses": "Course"
+}
+
 # Function to process the resume and recommend jobs
 def process_resume(file_path, user_locations):
     if not file_path:
