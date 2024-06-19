@@ -2,22 +2,11 @@ import streamlit as st
 import os
 from src.components.job_recommender import set_skills, recommend_jobs
 import src.components.skills_extraction as skills_extraction
+import src.components.cv_review as review_cv
 import pandas as pd
 
 # Load dataset
 jd_df = pd.read_csv('D:/ML_Projects/Job_Reccomendation_System/src/data/jd_structured_data.csv')
-
-section_mapping = {
-    "About": "About me",
-    "Education": "Educations",
-    "Professional Experience": "Professional Experience",
-    "Organization Experience": "Organizational Experience",
-    "Committee Experience": "Organizational Experience",
-    "Projects": "Project",
-    "Skill": "Skills",
-    "Key Competencies": "Skills",
-    "Courses": "Course"
-}
 
 # Function to process the resume and recommend jobs
 def process_resume(file_path, user_locations):
@@ -62,6 +51,9 @@ def main():
     else:
         user_location = ["Remote"]
     
+    # Select job position for CV review
+    job_position = st.selectbox("Pilih posisi pekerjaan yang Anda inginkan:", jd_df['Position'].unique().tolist())
+    
     if uploaded_file is not None:
         # Create uploads directory if it doesn't exist
         if not os.path.exists("Resume"):
@@ -72,9 +64,22 @@ def main():
         with open(file_path, "wb") as f:
             f.write(uploaded_file.getbuffer())
             st.write("Dokumen berhasil diunggah!")
+            
+        # Review and grade the CV
+        section_scores, grade = review_cv(file_path, job_position, jd_df)
+        if section_scores:
+            st.write("### CV Review:")
+            st.write(f"Sections found: {section_scores}")
+            st.write(f"CV Grade: {grade:.2f}%")
+        else:
+            st.warning("Tidak ada bagian yang ditemukan atau format CV tidak didukung.")
         
         # Process resume and recommend jobs
-        location_specific_jobs = process_resume(file_path, user_location)
+        if user_location:
+            location_specific_jobs = {}
+            for location in user_location:
+                df_jobs = process_resume(file_path, location)
+                location_specific_jobs[location] = df_jobs
         
         if not location_specific_jobs:
             st.warning("Yuk tambahin lagi kemungkinan lokasi kerjamu! Soalnya ngga ada pekerjaan yang ditemukan untuk lokasi yang ditentukan.")

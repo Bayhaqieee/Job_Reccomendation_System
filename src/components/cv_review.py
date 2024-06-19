@@ -49,6 +49,7 @@ def review_cv(file_path, job_position, jd_df):
             "Key Competencies": "Skills",
             "Courses": "Course"
         }
+        
         standardized_sections = {}
         for section in section_mapping:
             if re.search(section, resume_text, re.IGNORECASE):
