@@ -1,7 +1,7 @@
 import re
 from collections import Counter
 import docx
-import skills_extraction as skills_extraction
+import src.components.skills_extraction as skills_extraction
 
 
 # Function to extract text from DOCX file
