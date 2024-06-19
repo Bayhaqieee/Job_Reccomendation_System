@@ -73,7 +73,7 @@ def main():
         if section_scores:
             st.write("### Tinjauan CV:")
             st.write(f"Bagian yang ada di CV mu adalah")
-            st.write(f"{section_scores}")
+            st.write(f"Sections found: {[key for key, value in section_scores.items() if value == 1]}")
             st.write(f"Nilai CV mu buat posisi ini adalah : {grade:.2f}%")
         else:
             st.warning("Tidak ada bagian yang ditemukan atau format CV tidak didukung.")
