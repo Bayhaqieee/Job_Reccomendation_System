@@ -82,11 +82,11 @@ def extract_text_from_pdf(file_path):
     return text
 
 # Function to extract keywords from the job position using jd_df and skills_dict
-def extract_keywords_from_position(job_position, jd_df):
-    # Extract skills from skills_dict
-    skills_list_from_dict = skills_dict.get(job_position, [])
-    
-    # Combine and return unique skills
+def extract_keywords_from_position(job_position):
+    if job_position in skills_dict:
+        skills_list_from_dict = skills_dict[job_position]
+    else:
+        skills_list_from_dict = []
     return [skill.lower() for skill in skills_list_from_dict]
 
 def standardize_sections(resume_text):
@@ -106,7 +106,7 @@ def standardize_sections(resume_text):
     
     return standardized_sections
 
-def review_cv(file_path, job_position, jd_df):
+def review_cv(file_path, job_position):
     try:
         # Extract text from PDF or DOCX resume
         if file_path.endswith('.pdf'):
@@ -117,7 +117,7 @@ def review_cv(file_path, job_position, jd_df):
             return None, "Unsupported file format"
         
         # Extract keywords from the job position
-        required_keywords = extract_keywords_from_position(job_position, jd_df)
+        required_keywords = extract_keywords_from_position(job_position)
         
         # Extract skills from the resume text
         resume_skills = skills_extraction.skills_extractor(file_path)
@@ -137,7 +137,7 @@ def review_cv(file_path, job_position, jd_df):
         # Identify missing skills
         missing_skills = set(required_keywords) - set(resume_keywords)
         
-        return standardized_sections, grade, list(missing_skills),required_keywords
+        return standardized_sections, grade, set(missing_skills), set(required_keywords)
     
     except Exception as e:
         return None, str(e)

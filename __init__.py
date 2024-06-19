@@ -69,23 +69,22 @@ def main():
             st.write("Dokumen berhasil diunggah!")
             
         # Review and grade the CV
-        result = review_cv(file_path, job_position, jd_df)
-        if result:
-            section_scores, grade, missing_skills, required_keywords = result
+        section_scores, grade, missing_skill, required_keyword = review_cv(file_path, job_position)
+        if section_scores:
             st.write("### CV Review:")
             # Display section scores as a list
             st.write(f"Sections found: {[key for key, value in section_scores.items() if value == 1]}")
             st.write(f"CV Grade: {grade:.2f}%")
-            if missing_skills:
+            if missing_skill:
                 st.write("### Skills you may want to pursue:")
                 checkboxes = {}
-                for skill in missing_skills:
+                for skill in missing_skill:
                     checkboxes[skill] = st.checkbox(skill)
 
                 # If any checkboxes are checked, increase the grade
                 for skill, is_checked in checkboxes.items():
                     if is_checked:
-                        grade += (1 / len(required_keywords)) * 100
+                        grade += (1 / len(required_keyword)) * 100
 
                 st.write(f"Updated CV Grade: {grade:.2f}%")
         else:
