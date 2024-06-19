@@ -52,7 +52,8 @@ def main():
         user_location = ["Remote"]
     
     # Select job position for CV review
-    job_position = st.selectbox("Pilih posisi pekerjaan yang Anda inginkan:", jd_df['Position'].unique().tolist())
+    position = jd_df['Job Title'].unique().tolist()
+    job_position = st.selectbox("Pilih posisi pekerjaan yang Anda inginkan:", position)
     
     if uploaded_file is not None:
         # Create uploads directory if it doesn't exist

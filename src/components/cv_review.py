@@ -13,7 +13,7 @@ def extract_text_from_docx(file_path):
     return '\n'.join(full_text)
 
 def extract_keywords_from_position(position, jd_df):
-    position_skills = jd_df[jd_df['Position'] == position]['Skills'].values
+    position_skills = jd_df[jd_df['Job Title'] == position]['Skills'].values
     if position_skills:
         skills_list = position_skills[0].split(',')
         return [skill.strip() for skill in skills_list]
