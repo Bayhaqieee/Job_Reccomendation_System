@@ -38,11 +38,11 @@ def main():
     st.write("Upload Your CV to be analyzed!")
     
     # File uploader
-    uploaded_file = st.file_uploader("Pilih file resume Anda (format PDF):", type=['pdf'])
-    st.write("Pastiin formatmu dokumenmu PDF dan Text-Based yaa!")
+    uploaded_file = st.file_uploader("Upload your resume (PDF Format):", type=['pdf'])
+    st.write("Make sure it's already in PDF and Text-Based file!")
     
     # Option to choose work preference
-    work_preference = st.selectbox("Pilih preferensi kerja Anda:", ["Work from Home", "Work from Office"])
+    work_preference = st.selectbox("Choose your work preference:", ["Work from Home", "Work from Office"])
     
     # Multiselect for office locations if 'Work from Office' is chosen
     if work_preference == "Work from Office":
@@ -69,15 +69,25 @@ def main():
             st.write("Dokumen berhasil diunggah!")
             
         # Review and grade the CV
-        section_scores, grade,missing_skills = review_cv(file_path, job_position,jd_df)
-        if section_scores:
-            st.write("### Tinjauan CV:")
-            st.write(f"Bagian yang ada di CV mu adalah")
+        result = review_cv(file_path, job_position, jd_df)
+        if result:
+            section_scores, grade, missing_skills, required_keywords = result
+            st.write("### CV Review:")
+            # Display section scores as a list
             st.write(f"Sections found: {[key for key, value in section_scores.items() if value == 1]}")
-            st.write(f"Nilai CV mu buat posisi ini adalah : {grade:.2f}%")
+            st.write(f"CV Grade: {grade:.2f}%")
             if missing_skills:
-                st.write("#### Skills yang perlu kamu kejar buat posisi ini adalah:")
-                st.write([skill for skill in missing_skills])
+                st.write("### Skills you may want to pursue:")
+                checkboxes = {}
+                for skill in missing_skills:
+                    checkboxes[skill] = st.checkbox(skill)
+
+                # If any checkboxes are checked, increase the grade
+                for skill, is_checked in checkboxes.items():
+                    if is_checked:
+                        grade += (1 / len(required_keywords)) * 100
+
+                st.write(f"Updated CV Grade: {grade:.2f}%")
         else:
             st.warning("Tidak ada bagian yang ditemukan atau format CV tidak didukung.")
         

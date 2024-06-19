@@ -71,13 +71,14 @@ def extract_text_from_docx(file_path):
         full_text.append(para.text)
     return '\n'.join(full_text)
 
-# Function to extract text from PDF file
+# Function to extract text from PDF file using PyPDF2
 def extract_text_from_pdf(file_path):
-    with open(file_path, 'rb') as f:
-        pdf_reader = PyPDF2.PdfReader(f)
-        text = ''
-        for page in pdf_reader.pages:
-            text += page.extract_text()
+    text = ""
+    with open(file_path, "rb") as file:
+        pdf_reader = PyPDF2.PdfFileReader(file)
+        for page_num in range(pdf_reader.numPages):
+            page = pdf_reader.getPage(page_num)
+            text += page.extractText()
     return text
 
 # Function to extract keywords from the job position using jd_df and skills_dict
@@ -130,13 +131,13 @@ def review_cv(file_path, job_position, jd_df):
         
         # Overall score
         total_score = sum(standardized_sections.values()) + keyword_score
-        max_score = len(standardized_sections) + len(required_keywords) - 1
+        max_score = len(standardized_sections) + len(required_keywords)
         grade = (total_score / max_score) * 100
         
-                # Identify missing skills
+        # Identify missing skills
         missing_skills = set(required_keywords) - set(resume_keywords)
         
-        return standardized_sections, grade, list(missing_skills)
+        return standardized_sections, grade, list(missing_skills),required_keywords
     
     except Exception as e:
         return None, str(e)
