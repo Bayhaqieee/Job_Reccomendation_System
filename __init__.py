@@ -54,6 +54,9 @@ def main():
     # Select job position for CV review
     job_position = st.selectbox("Pilih posisi pekerjaan yang Anda inginkan:", jd_df['Job Title'].unique().tolist())
     
+    # Initialize location_specific_jobs to avoid UnboundLocalError
+    location_specific_jobs = {}
+    
     if uploaded_file is not None:
         # Create uploads directory if it doesn't exist
         if not os.path.exists("Resume"):
@@ -68,9 +71,10 @@ def main():
         # Review and grade the CV
         section_scores, grade = review_cv(file_path, job_position,jd_df)
         if section_scores:
-            st.write("### CV Review:")
-            st.write(f"Sections found: {section_scores}")
-            st.write(f"CV Grade: {grade:.2f}%")
+            st.write("### Tinjauan CV:")
+            st.write(f"Bagian yang ada di CV mu adalah")
+            st.write(f"{section_scores}")
+            st.write(f"Nilai CV mu buat posisi ini adalah : {grade:.2f}%")
         else:
             st.warning("Tidak ada bagian yang ditemukan atau format CV tidak didukung.")
         
