@@ -69,12 +69,15 @@ def main():
             st.write("Dokumen berhasil diunggah!")
             
         # Review and grade the CV
-        section_scores, grade = review_cv(file_path, job_position,jd_df)
+        section_scores, grade,missing_skills = review_cv(file_path, job_position,jd_df)
         if section_scores:
             st.write("### Tinjauan CV:")
             st.write(f"Bagian yang ada di CV mu adalah")
             st.write(f"Sections found: {[key for key, value in section_scores.items() if value == 1]}")
             st.write(f"Nilai CV mu buat posisi ini adalah : {grade:.2f}%")
+            if missing_skills:
+                st.write("#### Skills yang perlu kamu kejar buat posisi ini adalah:")
+                st.write([skill for skill in missing_skills])
         else:
             st.warning("Tidak ada bagian yang ditemukan atau format CV tidak didukung.")
         
@@ -87,7 +90,7 @@ def main():
         else:
             # Display recommended jobs for each location
             for location, df_jobs in location_specific_jobs.items():
-                st.write(f"### Pekerjaan yang Direkomendasikan di {location}:")
+                st.write(f"#### Pekerjaan yang Direkomendasikan di {location}:")
                 if df_jobs.empty:
                     st.write("Tidak ada pekerjaan yang ditemukan untuk lokasi ini.")
                 else:

@@ -133,7 +133,10 @@ def review_cv(file_path, job_position, jd_df):
         max_score = len(standardized_sections) + len(required_keywords) - 1
         grade = (total_score / max_score) * 100
         
-        return standardized_sections, grade
+                # Identify missing skills
+        missing_skills = set(required_keywords) - set(resume_keywords)
+        
+        return standardized_sections, grade, list(missing_skills)
     
     except Exception as e:
         return None, str(e)
