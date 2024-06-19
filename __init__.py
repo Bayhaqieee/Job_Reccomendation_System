@@ -1,9 +1,10 @@
 import streamlit as st
 import os
+import pandas as pd
 from src.components.job_recommender import set_skills, recommend_jobs
 import src.components.skills_extraction as skills_extraction
-import src.components.cv_review as review_cv
-import pandas as pd
+from src.components.cv_review import review_cv
+
 
 # Load dataset
 jd_df = pd.read_csv('D:/ML_Projects/Job_Reccomendation_System/src/data/jd_structured_data.csv')
@@ -46,14 +47,12 @@ def main():
     # Multiselect for office locations if 'Work from Office' is chosen
     if work_preference == "Work from Office":
         # Extract unique locations from the dataset
-        location = jd_df['Location'].unique().tolist()
-        user_location = st.multiselect("Pilih lokasi pekerjaan (Anda bisa memilih lebih dari satu):", location)
+        user_location = st.multiselect("Pilih lokasi pekerjaan (Anda bisa memilih lebih dari satu):", jd_df['Location'].unique().tolist())
     else:
         user_location = ["Remote"]
     
     # Select job position for CV review
-    position = jd_df['Job Title'].unique().tolist()
-    job_position = st.selectbox("Pilih posisi pekerjaan yang Anda inginkan:", position)
+    job_position = st.selectbox("Pilih posisi pekerjaan yang Anda inginkan:", jd_df['Job Title'].unique().tolist())
     
     if uploaded_file is not None:
         # Create uploads directory if it doesn't exist
@@ -77,13 +76,10 @@ def main():
         
         # Process resume and recommend jobs
         if user_location:
-            location_specific_jobs = {}
-            for location in user_location:
-                df_jobs = process_resume(file_path, location)
-                location_specific_jobs[location] = df_jobs
+            location_specific_jobs = process_resume(file_path, user_location)
         
         if not location_specific_jobs:
-            st.warning("Yuk tambahin lagi kemungkinan lokasi kerjamu! Soalnya ngga ada pekerjaan yang ditemukan untuk lokasi yang ditentukan.")
+            st.warning("Tidak ada pekerjaan yang ditemukan untuk lokasi yang ditentukan.")
         else:
             # Display recommended jobs for each location
             for location, df_jobs in location_specific_jobs.items():

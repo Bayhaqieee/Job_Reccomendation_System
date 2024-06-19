@@ -32,8 +32,10 @@ def review_cv(file_path, job_position, jd_df):
         # Extract keywords from the job position
         required_keywords = extract_keywords_from_position(job_position, jd_df)
         
-        # Extract skills from resume
-        resume_keywords = resume_text.split()
+        # Extract skills from the resume text
+        resume_skills = skills_extraction.skills_extractor(file_path)
+        resume_keywords = [skill.lower() for skill in resume_skills]
+        
         keyword_counts = Counter(resume_keywords)
         keyword_score = sum(keyword_counts[keyword] for keyword in required_keywords if keyword in keyword_counts)
         
