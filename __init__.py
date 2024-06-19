@@ -66,7 +66,7 @@ def main():
             st.write("Dokumen berhasil diunggah!")
             
         # Review and grade the CV
-        section_scores, grade = review_cv(file_path, job_position, jd_df)
+        section_scores, grade = review_cv(file_path, job_position)
         if section_scores:
             st.write("### CV Review:")
             st.write(f"Sections found: {section_scores}")
