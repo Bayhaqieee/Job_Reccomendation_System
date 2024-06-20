@@ -37,9 +37,24 @@ def main():
     st.title("Job Recommendation App")
     st.write("Upload Your CV to be analyzed!")
     
-    # File uploader
-    uploaded_file = st.file_uploader("Upload your resume (PDF Format):", type=['pdf'])
-    st.write("Make sure it's already in PDF and Text-Based file!")
+    # Section 1: Title and Upload section
+    with st.container():
+        uploaded_file = st.file_uploader("Upload your resume (PDF Format):", type=['pdf'])
+        st.write("Make sure it's already in PDF and Text-Based file!")
+
+    # Initialize location_specific_jobs to avoid UnboundLocalError
+    location_specific_jobs = {}
+
+    if uploaded_file is not None:
+        # Create uploads directory if it doesn't exist
+        if not os.path.exists("Resume"):
+            os.makedirs("Resume")
+        
+        # Save the uploaded file to the uploads directory
+        file_path = os.path.join("Resume", uploaded_file.name)
+        with open(file_path, "wb") as f:
+            f.write(uploaded_file.getbuffer())
+            st.write("Dokumen berhasil diunggah!")
     
     # Option to choose work preference
     work_preference = st.selectbox("Choose your work preference:", ["Work from Home", "Work from Office"])
@@ -54,20 +69,7 @@ def main():
     # Select job position for CV review
     job_position = st.selectbox("Pilih posisi pekerjaan yang Anda inginkan:", jd_df['Job Title'].unique().tolist())
     
-    # Initialize location_specific_jobs to avoid UnboundLocalError
-    location_specific_jobs = {}
-    
-    if uploaded_file is not None:
-        # Create uploads directory if it doesn't exist
-        if not os.path.exists("Resume"):
-            os.makedirs("Resume")
-        
-        # Save the uploaded file to the uploads directory
-        file_path = os.path.join("Resume", uploaded_file.name)
-        with open(file_path, "wb") as f:
-            f.write(uploaded_file.getbuffer())
-            st.write("Dokumen berhasil diunggah!")
-            
+    if uploaded_file is not None:            
         # Review sections of the CV
         section_reviewer = SectionReviewer()
         section_scores, section_error = section_reviewer.review_sections(file_path)
