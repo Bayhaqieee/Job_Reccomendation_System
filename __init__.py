@@ -56,20 +56,13 @@ def main():
             f.write(uploaded_file.getbuffer())
             st.write("Dokumen berhasil diunggah!")
     
-    # Option to choose work preference
-    work_preference = st.selectbox("Choose your work preference:", ["Work from Home", "Work from Office"])
-    
-    # Multiselect for office locations if 'Work from Office' is chosen
-    if work_preference == "Work from Office":
-        # Extract unique locations from the dataset
-        user_location = st.multiselect("Pilih lokasi pekerjaan (Anda bisa memilih lebih dari satu):", jd_df['Location'].unique().tolist())
-    else:
-        user_location = ["Remote"]
-    
-    # Select job position for CV review
-    job_position = st.selectbox("Pilih posisi pekerjaan yang Anda inginkan:", jd_df['Job Title'].unique().tolist())
-    
-    if uploaded_file is not None:            
+        # Section 2 and 3 side by side
+        col1, col2 = st.columns(2)
+        
+        # Section 2: Choosing job title, CV grade, and missing skills
+        with col1:
+            job_position = st.selectbox("Choose the job position you want:", jd_df['Job Title'].unique().tolist())
+        
         # Review sections of the CV
         section_reviewer = SectionReviewer()
         section_scores, section_error = section_reviewer.review_sections(file_path)
@@ -127,7 +120,21 @@ def main():
                 st.warning(f"Error reviewing sections: {section_error}")
             if keyword_score is None:
                 st.warning("Error reviewing keywords.")
-        
+    
+    # Option to choose work preference
+    work_preference = st.selectbox("Choose your work preference:", ["Work from Home", "Work from Office"])
+    
+    # Multiselect for office locations if 'Work from Office' is chosen
+    if work_preference == "Work from Office":
+        # Extract unique locations from the dataset
+        user_location = st.multiselect("Pilih lokasi pekerjaan (Anda bisa memilih lebih dari satu):", jd_df['Location'].unique().tolist())
+    else:
+        user_location = ["Remote"]
+    
+    # Select job position for CV review
+    job_position = st.selectbox("Pilih posisi pekerjaan yang Anda inginkan:", jd_df['Job Title'].unique().tolist())
+    
+    if uploaded_file is not None:            
         # Process resume and recommend jobs
         if user_location:
             location_specific_jobs = process_resume(file_path, user_location)
