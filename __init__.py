@@ -84,7 +84,17 @@ def main():
             
             st.write("### CV Review:")
             # Display section scores as a list
-            st.write(f"Sections found: {[key for key, value in section_scores.items() if value == 1]}")
+            sections_found = [key for key, value in section_scores.items() if value == 1]
+            if sections_found:
+                st.write("#### Sections found:")
+                # Create a Markdown string with bullet points
+                bullet_points = "\n".join([f"- {section}" for section in sections_found])
+
+                # Display the bullet points using st.markdown
+                st.markdown(bullet_points)
+            else:
+                st.write("No sections found in the CV.")
+                
             st.write(f"CV Grade: {grade:.2f}%")
             
             if missing_skills:
