@@ -63,63 +63,63 @@ def main():
         with col1:
             job_position = st.selectbox("Choose the job position you want:", jd_df['Job Title'].unique().tolist())
         
-        # Review sections of the CV
-        section_reviewer = SectionReviewer()
-        section_scores, section_error = section_reviewer.review_sections(file_path)
-        
-        # Review keywords in the CV
-        keyword_reviewer = KeywordReviewer()
-        keyword_score, missing_skills, required_keywords = keyword_reviewer.review_keywords(file_path, job_position)
-        
-        if section_scores and keyword_score is not None:
-            # Calculate overall grade
-            total_score = sum(section_scores.values()) + keyword_score
-            max_score = len(section_scores) + len(required_keywords)
-            grade = (total_score / max_score) * 100
+            # Review sections of the CV
+            section_reviewer = SectionReviewer()
+            section_scores, section_error = section_reviewer.review_sections(file_path)
             
-            st.write("### CV Review:")
-            # Display section scores as a list
-            sections_found = [key for key, value in section_scores.items() if value == 1]
-            if sections_found:
-                st.write("#### Sections found:")
-                # Create a Markdown string with bullet points
-                bullet_points = "\n".join([f"- {section}" for section in sections_found])
-
-                # Display the bullet points using st.markdown
-                st.markdown(bullet_points)
-            else:
-                st.write("No sections found in the CV.")
+            # Review keywords in the CV
+            keyword_reviewer = KeywordReviewer()
+            keyword_score, missing_skills, required_keywords = keyword_reviewer.review_keywords(file_path, job_position)
+            
+            if section_scores and keyword_score is not None:
+                # Calculate overall grade
+                total_score = sum(section_scores.values()) + keyword_score
+                max_score = len(section_scores) + len(required_keywords)
+                grade = (total_score / max_score) * 100
                 
-            st.write(f"CV Grade: {grade:.2f}%")
-            
-            if missing_skills:
-                st.write("### Skills you may want to pursue:")
-                checkboxes = {}
-                for skill in missing_skills:
-                    checkboxes[skill] = st.checkbox(skill)
+                st.write("### CV Review:")
+                # Display section scores as a list
+                sections_found = [key for key, value in section_scores.items() if value == 1]
+                if sections_found:
+                    st.write("#### Sections found:")
+                    # Create a Markdown string with bullet points
+                    bullet_points = "\n".join([f"- {section}" for section in sections_found])
 
-                # Initialize grade calculation
-                updated_grade = grade
+                    # Display the bullet points using st.markdown
+                    st.markdown(bullet_points)
+                else:
+                    st.write("No sections found in the CV.")
+                    
+                st.write(f"CV Grade: {grade:.2f}%")
+                
+                if missing_skills:
+                    st.write("### Skills you may want to pursue:")
+                    checkboxes = {}
+                    for skill in missing_skills:
+                        checkboxes[skill] = st.checkbox(skill)
 
-                # If any checkboxes are checked, increase the grade
-                for skill, is_checked in checkboxes.items():
-                    if is_checked:
-                        # Calculate contribution of each checked skill
-                        contribution = (1 / len(required_keywords)) * 100 - 1
-                        
-                        # Check if the grade will surpass 100% after adding this skill's contribution
-                        if updated_grade + contribution <= 100:
-                            updated_grade += contribution
-                        else:
-                            updated_grade = 100  # Cap the grade at 100% if it exceeds
-                        
-                # Display the updated grade
-                st.write(f"Updated CV Grade: {updated_grade:.2f}%")
-        else:
-            if section_error:
-                st.warning(f"Error reviewing sections: {section_error}")
-            if keyword_score is None:
-                st.warning("Error reviewing keywords.")
+                    # Initialize grade calculation
+                    updated_grade = grade
+
+                    # If any checkboxes are checked, increase the grade
+                    for skill, is_checked in checkboxes.items():
+                        if is_checked:
+                            # Calculate contribution of each checked skill
+                            contribution = (1 / len(required_keywords)) * 100 - 1
+                            
+                            # Check if the grade will surpass 100% after adding this skill's contribution
+                            if updated_grade + contribution <= 100:
+                                updated_grade += contribution
+                            else:
+                                updated_grade = 100  # Cap the grade at 100% if it exceeds
+                            
+                    # Display the updated grade
+                    st.write(f"Updated CV Grade: {updated_grade:.2f}%")
+            else:
+                if section_error:
+                    st.warning(f"Error reviewing sections: {section_error}")
+                if keyword_score is None:
+                    st.warning("Error reviewing keywords.")
     
         # Section 3: Choosing working preference, location and output of recommended jobs
         with col2:
