@@ -121,34 +121,27 @@ def main():
             if keyword_score is None:
                 st.warning("Error reviewing keywords.")
     
-    # Option to choose work preference
-    work_preference = st.selectbox("Choose your work preference:", ["Work from Home", "Work from Office"])
-    
-    # Multiselect for office locations if 'Work from Office' is chosen
-    if work_preference == "Work from Office":
-        # Extract unique locations from the dataset
-        user_location = st.multiselect("Pilih lokasi pekerjaan (Anda bisa memilih lebih dari satu):", jd_df['Location'].unique().tolist())
-    else:
-        user_location = ["Remote"]
-    
-    # Select job position for CV review
-    job_position = st.selectbox("Pilih posisi pekerjaan yang Anda inginkan:", jd_df['Job Title'].unique().tolist())
-    
-    if uploaded_file is not None:            
-        # Process resume and recommend jobs
-        if user_location:
-            location_specific_jobs = process_resume(file_path, user_location)
+        # Section 3: Choosing working preference, location and output of recommended jobs
+        with col2:
+            work_preference = st.selectbox("Choose your work preference:", ["Work from Home", "Work from Office"])
+            
+            if work_preference == "Work from Office":
+                user_location = st.multiselect("Choose job locations (you can choose more than one):", jd_df['Location'].unique().tolist())
+            else:
+                user_location = ["Remote"]
         
-        if not location_specific_jobs:
-            st.warning("No jobs found for the specified location.")
-        else:
-            # Display recommended jobs for each location
-            for location, df_jobs in location_specific_jobs.items():
-                st.write(f"#### Pekerjaan yang Direkomendasikan di {location}:")
-                if df_jobs.empty:
-                    st.write("Tidak ada pekerjaan yang ditemukan untuk lokasi ini.")
-                else:
-                    st.dataframe(df_jobs[['Job Title', 'Company Name', 'Location', 'Industry', 'Sector', 'Average Salary']])
+            if user_location:
+                location_specific_jobs = process_resume(file_path, user_location)
+        
+            if not location_specific_jobs:
+                st.warning("No jobs found for the specified location.")
+            else:
+                for location, df_jobs in location_specific_jobs.items():
+                    st.write(f"### Recommended Jobs in {location}:")
+                    if df_jobs.empty:
+                        st.write("No jobs found for this location.")
+                    else:
+                        st.dataframe(df_jobs[['Job Title', 'Company Name', 'Location', 'Industry', 'Sector', 'Average Salary']])
         
 
 # Run the Streamlit app
