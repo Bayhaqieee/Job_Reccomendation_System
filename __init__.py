@@ -6,6 +6,25 @@ import src.components.skills_extraction as skills_extraction
 from src.components.cv_review import SectionReviewer, KeywordReviewer
 
 
+# Set page configuration
+st.set_page_config(layout="wide")
+
+# Custom CSS to increase the width
+st.markdown(
+    """
+    <style>
+    .reportview-container .main .block-container{
+        max-width: 95%;
+        padding-top: 2rem;
+        padding-right: 2rem;
+        padding-left: 2rem;
+        padding-bottom: 2rem;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 # Load dataset
 jd_df = pd.read_csv('D:/ML_Projects/Job_Reccomendation_System/src/data/jd_structured_data.csv')
 
