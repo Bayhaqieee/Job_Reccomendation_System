@@ -69,26 +69,30 @@ def main():
             st.write("Dokumen berhasil diunggah!")
             
         # Review and grade the CV
-        section_scores, grade, missing_skill, required_keyword = review_cv(file_path, job_position)
-        if section_scores:
-            st.write("### CV Review:")
-            # Display section scores as a list
-            st.write(f"Sections found: {[key for key, value in section_scores.items() if value == 1]}")
-            st.write(f"CV Grade: {grade:.2f}%")
-            if missing_skill:
-                st.write("### Skills you may want to pursue:")
-                checkboxes = {}
-                for skill in missing_skill:
-                    checkboxes[skill] = st.checkbox(skill)
+        result = review_cv(file_path, job_position)
+        if result is not None and isinstance(result, tuple) and len(result) == 4:
+            section_scores, grade, missing_skills, required_keywords = result
+            if section_scores:
+                st.write("### CV Review:")
+                # Display section scores as a list
+                st.write(f"Sections found: {[key for key, value in section_scores.items() if value == 1]}")
+                st.write(f"CV Grade: {grade:.2f}%")
+                if missing_skills:
+                    st.write("### Skills you may want to pursue:")
+                    checkboxes = {}
+                    for skill in missing_skills:
+                        checkboxes[skill] = st.checkbox(skill)
 
-                # If any checkboxes are checked, increase the grade
-                for skill, is_checked in checkboxes.items():
-                    if is_checked:
-                        grade += (1 / len(required_keyword)) * 100
+                    # If any checkboxes are checked, increase the grade
+                    for skill, is_checked in checkboxes.items():
+                        if is_checked:
+                            grade += (1 / len(required_keywords)) * 100
 
-                st.write(f"Updated CV Grade: {grade:.2f}%")
+                    st.write(f"Updated CV Grade: {grade:.2f}%")
+            else:
+                st.warning("Tidak ada bagian yang ditemukan atau format CV tidak didukung.")
         else:
-            st.warning("Tidak ada bagian yang ditemukan atau format CV tidak didukung.")
+            st.warning("Error in CV review process.")
         
         # Process resume and recommend jobs
         if user_location:

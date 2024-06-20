@@ -137,7 +137,7 @@ def review_cv(file_path, job_position):
         # Identify missing skills
         missing_skills = set(required_keywords) - set(resume_keywords)
         
-        return standardized_sections, grade, set(missing_skills), set(required_keywords)
+        return standardized_sections, grade, missing_skills, required_keywords
     
     except Exception as e:
         return None, str(e)
