@@ -54,7 +54,7 @@ def process_resume(file_path, user_locations):
 # Streamlit app
 def main():
     st.title("Job Recommendation App")
-    st.write("Upload Your CV to be analyzed!")
+    st.write("Upload your CV to be analyzed!")
     
     # Section 1: Title and Upload section
     with st.container():
