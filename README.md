@@ -11,6 +11,12 @@ First of all, this System will not be created without the help from Abbas Behrai
 - Fixing the Upload system, on Abbas repo, I discovered that the Upload system on the interface is not working and that the system needs to change the CV Path on a regular basis to read my CV, thus by adjusting the CV uploading system, the system can receive and read the cv without changing the system path.
 - Removing some Unnecessary Folder needed for my system
 
+## Additional Function
+- You can add your working preference! which one would you like? Work from home or Work from Office?
+- You can also select multiple cities to find with, and the system will give reccomendation based on your selected cities
+- The system will detecting your CV section, this section is important for your CV screening
+- System will also giving you grades for your CV, also giving you reccomendation for what kind of skills that suits you based on position you want to chase
+
 ## Additional Notes
 - Please change the File Datapath on the Components or Double check your auto path changer by checking all file path
 - You can change the dataset by utilizing the job dataset generator on components folder
