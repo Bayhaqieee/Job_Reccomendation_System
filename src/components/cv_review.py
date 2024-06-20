@@ -114,8 +114,8 @@ def review_cv(file_path, job_position):
         elif file_path.endswith('.docx'):
             resume_text = extract_text_from_docx(file_path)
         else:
-            return None, "Unsupported file format"
-        
+            return None, "Unsupported file format", set(), []
+
         # Extract keywords from the job position
         required_keywords = extract_keywords_from_position(job_position)
         
@@ -140,4 +140,4 @@ def review_cv(file_path, job_position):
         return standardized_sections, grade, missing_skills, required_keywords
     
     except Exception as e:
-        return None, str(e)
+        return None, str(e), set(), []

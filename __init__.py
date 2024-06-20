@@ -68,7 +68,7 @@ def main():
             f.write(uploaded_file.getbuffer())
             st.write("Dokumen berhasil diunggah!")
             
-        # Review and grade the CV
+# Review and grade the CV
         result = review_cv(file_path, job_position)
         if result is not None and isinstance(result, tuple) and len(result) == 4:
             section_scores, grade, missing_skills, required_keywords = result
@@ -90,16 +90,16 @@ def main():
 
                     st.write(f"Updated CV Grade: {grade:.2f}%")
             else:
-                st.warning("Tidak ada bagian yang ditemukan atau format CV tidak didukung.")
+                st.warning("No sections found or CV format not supported.")
         else:
-            st.warning("Error in CV review process.")
+            st.warning("Error reviewing CV.")
         
         # Process resume and recommend jobs
         if user_location:
             location_specific_jobs = process_resume(file_path, user_location)
         
         if not location_specific_jobs:
-            st.warning("Tidak ada pekerjaan yang ditemukan untuk lokasi yang ditentukan.")
+            st.warning("No jobs found for the specified location.")
         else:
             # Display recommended jobs for each location
             for location, df_jobs in location_specific_jobs.items():
