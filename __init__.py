@@ -103,12 +103,23 @@ def main():
                 for skill in missing_skills:
                     checkboxes[skill] = st.checkbox(skill)
 
+                # Initialize grade calculation
+                updated_grade = grade
+
                 # If any checkboxes are checked, increase the grade
                 for skill, is_checked in checkboxes.items():
                     if is_checked:
-                        grade += (1 / len(required_keywords)) * 100
-
-                st.write(f"Updated CV Grade: {grade:.2f}%")
+                        # Calculate contribution of each checked skill
+                        contribution = (1 / len(required_keywords)) * 100 - 1
+                        
+                        # Check if the grade will surpass 100% after adding this skill's contribution
+                        if updated_grade + contribution <= 100:
+                            updated_grade += contribution
+                        else:
+                            updated_grade = 100  # Cap the grade at 100% if it exceeds
+                        
+                # Display the updated grade
+                st.write(f"Updated CV Grade: {updated_grade:.2f}%")
         else:
             if section_error:
                 st.warning(f"Error reviewing sections: {section_error}")
