@@ -62,7 +62,6 @@ section_mapping = {
     "Relevant Coursework": "Courses"
 }
 
-
 # Function to extract text from DOCX file
 def extract_text_from_docx(file_path):
     doc = docx.Document(file_path)
@@ -106,38 +105,40 @@ def standardize_sections(resume_text):
     
     return standardized_sections
 
-def review_cv(file_path, job_position):
-    try:
-        # Extract text from PDF or DOCX resume
-        if file_path.endswith('.pdf'):
-            resume_text = extract_text_from_pdf(file_path)
-        elif file_path.endswith('.docx'):
-            resume_text = extract_text_from_docx(file_path)
-        else:
-            return None, "Unsupported file format", set(), []
+class SectionReviewer:
+    def review_sections(self, file_path):
+        try:
+            # Extract text from PDF or DOCX resume
+            if file_path.endswith('.pdf'):
+                resume_text = extract_text_from_pdf(file_path)
+            elif file_path.endswith('.docx'):
+                resume_text = extract_text_from_docx(file_path)
+            else:
+                return None, "Unsupported file format"
+            
+            # Standardize section names
+            standardized_sections = standardize_sections(resume_text)
+            
+            return standardized_sections, None
+        except Exception as e:
+            return None, str(e)
 
-        # Extract keywords from the job position
-        required_keywords = extract_keywords_from_position(job_position)
-        
-        # Extract skills from the resume text
-        resume_skills = skills_extraction.skills_extractor(file_path)
-        resume_keywords = [skill.lower() for skill in resume_skills]
-        
-        keyword_counts = Counter(resume_keywords)
-        keyword_score = sum(keyword_counts[keyword] for keyword in required_keywords if keyword in keyword_counts)
-        
-        # Standardize section names
-        standardized_sections = standardize_sections(resume_text)
-        
-        # Overall score
-        total_score = sum(standardized_sections.values()) + keyword_score
-        max_score = len(standardized_sections) + len(required_keywords)
-        grade = (total_score / max_score) * 100
-        
-        # Identify missing skills
-        missing_skills = set(required_keywords) - set(resume_keywords)
-        
-        return standardized_sections, grade, missing_skills, required_keywords
-    
-    except Exception as e:
-        return None, str(e), set(), []
+class KeywordReviewer:
+    def review_keywords(self, file_path, job_position):
+        try:
+            # Extract keywords from the job position
+            required_keywords = extract_keywords_from_position(job_position)
+            
+            # Extract skills from the resume text
+            resume_skills = skills_extraction.skills_extractor(file_path)
+            resume_keywords = [skill.lower() for skill in resume_skills]
+            
+            keyword_counts = Counter(resume_keywords)
+            keyword_score = sum(keyword_counts[keyword] for keyword in required_keywords if keyword in keyword_counts)
+            
+            # Identify missing skills
+            missing_skills = set(required_keywords) - set(resume_keywords)
+            
+            return keyword_score, missing_skills, required_keywords
+        except Exception as e:
+            return None, str(e), []
