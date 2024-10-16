@@ -13,7 +13,7 @@ nltk.download('stopwords')
 stopw = set(stopwords.words('english'))
 
 # Load dataset:
-jd_df = pd.read_csv(r'D:/ML_Projects/Job_Reccomendation_System/src/data/jd_structured_data.csv')
+jd_df = pd.read_csv(r'src/data/jd_structured_data.csv')
 
 # Global variable to hold skills
 skills = []
