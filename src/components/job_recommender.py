@@ -5,7 +5,10 @@ from sklearn.neighbors import NearestNeighbors
 import pandas as pd
 import numpy as np
 from nltk.corpus import stopwords
+import nltk
 
+# Download the stopwords dataset
+nltk.download('stopwords')
 # Load the NLTK stopwords
 stopw = set(stopwords.words('english'))
 

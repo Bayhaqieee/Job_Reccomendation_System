@@ -4,7 +4,10 @@ import pandas as pd
 from src.components.job_recommender import set_skills, recommend_jobs
 import src.components.skills_extraction as skills_extraction
 from src.components.cv_review import SectionReviewer, KeywordReviewer
+import nltk
 
+# Download the stopwords dataset
+nltk.download('stopwords')
 
 # Set page configuration
 st.set_page_config(layout="wide")
