@@ -1,4 +1,5 @@
 setuptools
+distutils-pytest
 pandas==2.1.1
 numpy==1.21.1
 seaborn==0.12.2
